@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="gl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aplicacións educativas de código aberto</title>
+<meta name="description" content="Ferramentas web de código aberto para o profesorado de Educación Infantil e Primaria.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f2;
+    --surface:#ffffff;
+    --surface-alt:#f1ece3;
+    --border:#e2d9cb;
+    --text:#2a2521;
+    --text-muted:#6e655a;
+    --accent:#3d6b63;
+    --accent-strong:#2c4d47;
+    --accent-soft:#dce8e4;
+    --c1:#a63f2e; --c1-soft:#f3e0da;
+    --c2:#3d7a4e; --c2-soft:#dfeee3;
+    --c3:#a9761f; --c3-soft:#f3e6cb;
+    --c4:#345f91; --c4-soft:#dbe6f2;
+    --shadow:0 1px 2px rgba(42,37,33,.05), 0 10px 28px -10px rgba(42,37,33,.16);
+    --shadow-hover:0 4px 10px rgba(42,37,33,.07), 0 20px 40px -14px rgba(42,37,33,.24);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1c1a17; --surface:#252220; --surface-alt:#2f2b27; --border:#433c33;
+      --text:#f1eae0; --text-muted:#b3a898; --accent:#74ab9f; --accent-strong:#9bc9bf;
+      --accent-soft:#2b3936;
+      --c1:#e0806e; --c1-soft:#3a231e;
+      --c2:#7fcf94; --c2-soft:#213229;
+      --c3:#e0b45c; --c3-soft:#3a2f18;
+      --c4:#89b3e0; --c4-soft:#1f2c3a;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -10px rgba(0,0,0,.5);
+      --shadow-hover:0 4px 10px rgba(0,0,0,.35), 0 24px 44px -14px rgba(0,0,0,.6);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1c1a17; --surface:#252220; --surface-alt:#2f2b27; --border:#433c33;
+    --text:#f1eae0; --text-muted:#b3a898; --accent:#74ab9f; --accent-strong:#9bc9bf;
+    --accent-soft:#2b3936;
+    --c1:#e0806e; --c1-soft:#3a231e;
+    --c2:#7fcf94; --c2-soft:#213229;
+    --c3:#e0b45c; --c3-soft:#3a2f18;
+    --c4:#89b3e0; --c4-soft:#1f2c3a;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -10px rgba(0,0,0,.5);
+    --shadow-hover:0 4px 10px rgba(0,0,0,.35), 0 24px 44px -14px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Karla',system-ui,sans-serif;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .shell{max-width:980px;margin:0 auto;padding:0 24px 70px;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;isolation:isolate;
+    padding:88px 24px 80px;text-align:center;
+    background:linear-gradient(150deg,#264841,#3d6b63 55%,#4d8177);
+    border-radius:0 0 36px 36px;
+  }
+  .hero::before,.hero::after,.hero .blob3{
+    content:"";position:absolute;z-index:0;border-radius:50%;
+    filter:blur(50px);
+  }
+  .hero::before{
+    width:320px;height:320px;top:-140px;left:8%;
+    background:var(--c3);opacity:.35;
+  }
+  .hero::after{
+    width:280px;height:280px;bottom:-140px;right:10%;
+    background:var(--c1);opacity:.3;
+  }
+  .hero .blob3{
+    width:260px;height:260px;top:20%;right:-60px;
+    background:var(--c4);opacity:.28;
+  }
+  .hero-inner{position:relative;z-index:1;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;margin:0 0 18px;font-weight:600;
+    color:rgba(255,255,255,.85);
+    display:inline-block;padding:6px 14px;border-radius:999px;
+    background:rgba(255,255,255,.12);
+  }
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:700;font-size:clamp(2.1rem,5vw,3rem);
+    margin:0 0 16px;color:#fdfbf7;letter-spacing:-.01em;
+  }
+  .hero p{
+    font-size:1.04rem;color:rgba(255,255,255,.82);max-width:520px;margin:0 auto;
+  }
+
+  /* ---------- grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:52px;}
+  @media (max-width:680px){.grid{grid-template-columns:1fr;}}
+
+  .card{
+    position:relative;background:var(--surface);border:1px solid var(--border);
+    border-radius:16px;padding:26px 26px 24px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:14px;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-hover);
+    border-color:var(--card-c);
+  }
+  .icon-badge{
+    width:52px;height:52px;border-radius:13px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--card-soft);color:var(--card-c);flex:none;
+  }
+  .icon-badge svg{width:26px;height:26px;}
+  .card h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;margin:0;
+    color:var(--text);
+  }
+  .card p{margin:0;font-size:.9rem;color:var(--text-muted);flex:1;}
+  .card a.open{
+    align-self:flex-start;
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;
+    color:var(--card-c);text-decoration:none;padding-bottom:2px;
+    border-bottom:1.5px solid transparent;
+    transition:gap .15s ease, border-color .15s ease;
+  }
+  .card a.open .arrow{transition:transform .15s ease;}
+  .card a.open:hover{border-color:var(--card-c);gap:10px;}
+  .card a.open:hover .arrow{transform:translateX(2px);}
+
+  .card.c1{--card-c:var(--c1);--card-soft:var(--c1-soft);}
+  .card.c2{--card-c:var(--c2);--card-soft:var(--c2-soft);}
+  .card.c3{--card-c:var(--c3);--card-soft:var(--c3-soft);}
+  .card.c4{--card-c:var(--c4);--card-soft:var(--c4-soft);}
+
+  footer{
+    margin-top:56px;padding-top:22px;border-top:1px solid var(--border);
+    font-size:.76rem;color:var(--text-muted);
+    display:flex;justify-content:center;gap:8px;flex-wrap:wrap;text-align:center;
+  }
+  footer .dot{opacity:.5;}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="hero">
+    <span class="blob3"></span>
+    <div class="hero-inner">
+      <p class="eyebrow">Código aberto · Educación Infantil e Primaria</p>
+      <h1>Aplicacións para o día a día na aula</h1>
+      <p>Catro ferramentas web independentes, gratuítas e listas para usar. Preme en calquera delas para abrila.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card c4">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l7 3.2v5.3c0 4.7-3 8.7-7 9.9-4-1.2-7-5.2-7-9.9V6.2L12 3z"/>
+          <path d="M9 12.2l2 2 4.2-4.4"/>
+        </svg>
+      </div>
+      <h2>LOPDocentes</h2>
+      <p>Guía de referencia sobre protección de datos para o profesorado: análise de máis de 90 ferramentas dixitais e supostos prácticos aplicados ao ámbito educativo.</p>
+      <a class="open" href="https://evacvarela-gal.github.io/lopdocentes/">Abrir aplicación <span class="arrow">→</span></a>
+    </div>
+
+    <div class="card c3">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.5" y="5" width="17" height="15" rx="2.2"/>
+          <path d="M3.5 9.6h17"/>
+          <path d="M8 3v4M16 3v4"/>
+          <path d="M7.2 13.2h2.6M7.2 16.4h4.8"/>
+          <path d="M14.5 16.6l1.6 1.6 2.8-3"/>
+        </svg>
+      </div>
+      <h2>Planificador Visual TEA</h2>
+      <p>Creación de axendas visuais, anticipacións e apoios con pictogramas para alumnado con TEA, mediante secuencias de tarefas e reforzos.</p>
+      <a class="open" href="https://evacvarela-gal.github.io/PlanificadorVisual/">Abrir aplicación <span class="arrow">→</span></a>
+    </div>
+
+    <div class="card c2">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="8.5"/>
+          <path d="M12 3.5v3.4M12 17.1v3.4M3.5 12h3.4M17.1 12h3.4"/>
+          <path d="M6.5 6.5l2.4 2.4M15.1 15.1l2.4 2.4M17.5 6.5l-2.4 2.4M8.9 15.1l-2.4 2.4"/>
+        </svg>
+      </div>
+      <h2>Xestor de Patios Dinámicos</h2>
+      <p>Organización e planificación das xornadas de patios dinámicos: xogos, sesións e xestión da actividade nos recreos.</p>
+      <a class="open" href="https://evacvarela-gal.github.io/patios-dinamicos-coledeparga/">Abrir aplicación <span class="arrow">→</span></a>
+    </div>
+
+    <div class="card c1">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="12" r="6.2"/>
+          <circle cx="15.5" cy="12" r="6.2"/>
+        </svg>
+      </div>
+      <h2>Comparador de ítems EI</h2>
+      <p>Comparación de ítems de avaliación de Educación Infantil entre cursos, para detectar correlacións e duplicados e reducir o traballo administrativo.</p>
+      <a class="open" href="https://evacvarela-gal.github.io/ItemsAvaliacionInfantil/">Abrir aplicación <span class="arrow">→</span></a>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>Ferramentas de código aberto para docentes · sen custo</span>
+    <span class="dot">·</span>
+    <span>CC BY 4.0 · MIT · ORCID 0009-0008-4320-4886</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
